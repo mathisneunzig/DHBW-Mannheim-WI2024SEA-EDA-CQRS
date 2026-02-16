@@ -1,0 +1,23 @@
+services:
+  # Der Message Broker für die Event-Driven Architecture (EDA)
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"   # Standard-Port für Kommunikation
+      - "15672:15672" # Dashboard zur Kontrolle
+
+  # Die Schreibseite (Commands)
+  feeding-service:
+    build: ./feeding-command-service
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+
+  # Die Leseseite (Queries)
+  stats-service:
+    build: ./cat-stats-query-service
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_HOST=rabbitmq
