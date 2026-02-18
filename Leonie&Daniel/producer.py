@@ -3,6 +3,12 @@
 # Project by Daniel and Leonie
 # ============================================
 
+import pika
+
+connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+channel = connection.channel()
+channel.queue_declare(queue='events')
+
 COLORS = {
     'r': 'red',
     'g': 'green',
@@ -28,5 +34,13 @@ def display_menu():
     print("  esc  = Exit program")
     print("-" * 50 + "\n")
 
+def sendEvent():
+    channel.basic_publish(exchange='',
+                      routing_key='events',
+                      body='Hello World!')
+    print("Success")
+
 if __name__ == "__main__":
     display_menu()
+    sendEvent()
+    connection.close()
