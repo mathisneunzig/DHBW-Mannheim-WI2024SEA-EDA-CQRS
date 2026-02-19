@@ -10,10 +10,12 @@ import square from './assets/square.png'
 	<div>
 		<p>Hunger: xxx</p>
 		<p>Sleep: xxx</p>
+		<p>Boredom: xxx</p>
 	</div>	
 	<div style="display: flex; justify-content: center; gap: 30px;">
-		<button>a</button>
-		<button>b</button>
+		<button>Feed</button>
+		<button>Sleep</button>
+		<button>Play</button>
 	</div>
 </template>
 
