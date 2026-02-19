@@ -1,27 +1,32 @@
-package main
+package producer
 
 import (
 	"fmt"
-	"time"
 
-	brokerUtil "CQRS_EDA_TILL"
+	"CQRS_EDA_TILL/broker"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
-func main() {
-	broker, err := brokerUtil.NewBrokerUtil("tcp://localhost:1883", "producer", "user", "password")
+type Kassenpersonal struct {
+	broker *broker.BrokerUtil
+}
+
+func NewKassenpersonal() (*Kassenpersonal, error) {
+	broker, err := broker.NewBrokerUtil("tcp://localhost:1883", "producer", "user", "password")
 	if err != nil {
 		fmt.Printf("Error: %v", err)
-		return
+		return nil, err
 	}
+	return &Kassenpersonal{
+		broker: broker,
+	}, nil
+}
 
-	message_callback := func(_ mqtt.Client, msg mqtt.Message) {
-		fmt.Printf("Neues Event erhalten: %v", string(msg.Payload()))
-	}
-	broker.SubscribeTopic("test/topic", message_callback)
+func (k *Kassenpersonal) message_callback(_ mqtt.Client, msg mqtt.Message) {
+	fmt.Printf("Neues Event erhalten: %v", string(msg.Payload()))
+}
 
-	for {
-		time.Sleep(1 * time.Second)
-	}
+func (k *Kassenpersonal) CreateOrder(order string) {
+	k.broker.PublishMessage("order/new", order)
 }

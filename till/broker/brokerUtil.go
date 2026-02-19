@@ -1,4 +1,4 @@
-package brokerUtil
+package broker
 
 import (
 	"fmt"
@@ -6,11 +6,23 @@ import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
-type brokerUtil struct {
+type CoffeeOrderCreated struct {
+	OrderID int    `json:"order_id"`
+	Name    string `json:"name"`
+	Drink   string `json:"drink"`
+	Size    string `json:"size"`
+}
+
+type CoffeeOrderFinished struct {
+	OrderID  int  `json:"order_id"`
+	Finished bool `json:"finished"`
+}
+
+type BrokerUtil struct {
 	mqttClient mqtt.Client
 }
 
-func NewBrokerUtil(url string, clientID string, user string, password string) (*brokerUtil, error) {
+func NewBrokerUtil(url string, clientID string, user string, password string) (*BrokerUtil, error) {
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(url)
 	opts.SetClientID(clientID)
@@ -23,10 +35,10 @@ func NewBrokerUtil(url string, clientID string, user string, password string) (*
 		return nil, token.Error()
 	}
 
-	return &brokerUtil{mqttClient: client}, nil
+	return &BrokerUtil{mqttClient: client}, nil
 }
 
-func (b *brokerUtil) SubscribeTopic(topic string, message_callback mqtt.MessageHandler) {
+func (b *BrokerUtil) SubscribeTopic(topic string, message_callback mqtt.MessageHandler) {
 	token := b.mqttClient.Subscribe(topic, 1, nil)
 	token.Wait()
 	if token.Error() != nil {
@@ -35,7 +47,7 @@ func (b *brokerUtil) SubscribeTopic(topic string, message_callback mqtt.MessageH
 	fmt.Printf("Erfolgreich %s subscribed!", topic)
 }
 
-func (b *brokerUtil) PublishMessage(topic string, msg string) {
+func (b *BrokerUtil) PublishMessage(topic string, msg string) {
 	token := b.mqttClient.Publish(topic, 1, false, msg)
 	token.Wait()
 	if token.Error() != nil {
