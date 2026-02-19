@@ -7,7 +7,7 @@ async def main():
         password="Bob1234!"
     )
     
-    device = await Discover.discover_single("192.168.178.44", credentials=credentials)
+    device = await Discover.discover_single("10.157.57.20", credentials=credentials)
     await device.update()
     await device.set_hsv(240, 100, 100)# Ist Blau hier können wir die Farbe ändern.
     await device.disconnect()

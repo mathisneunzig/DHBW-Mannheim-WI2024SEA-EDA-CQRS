@@ -40,18 +40,20 @@ def display_menu():
     print("-" * 50 + "\n")
 
 def sendEvent(data):
-    #message = json.dumps(event_data).encode()
 
-    channel.basic_publish(
-        exchange='',
-        routing_key="events",
-        body=data,
-        properties=pika.BasicProperties(
-            content_type='application/json',
-            delivery_mode=2
+    if (data != None):
+        channel.basic_publish(
+            exchange='',
+            routing_key="events",
+            body=data,
+            properties=pika.BasicProperties(
+                content_type='application/json',
+                delivery_mode=2
+            )
         )
-    )
-    print("Data successfully sent")
+        print("Data successfully sent")
+    else:
+        print("No data sent")
 
 def getHexColorCode(input_char):
     for color_char, color in COLORS.items():
@@ -74,6 +76,13 @@ def create_event():
 
 if __name__ == "__main__":
     display_menu()
-while(True):
-    create_event()
+try:
+    while(True):
+        create_event()
+except KeyboardInterrupt:
+    print('Interrupted')
+    try:
+        sys.exit(0)
+    except SystemExit:
+        os._exit(0)
 connection.close()
