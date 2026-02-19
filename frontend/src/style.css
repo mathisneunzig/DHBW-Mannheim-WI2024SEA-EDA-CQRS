@@ -38,6 +38,24 @@ h1, h2 {
   font-family: 'Press Start 2P', cursive;
   font-size: 3.2em;
   line-height: 1.1;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 
+      0 0 5px #fff,
+      0 0 10px #646cff,
+      0 0 20px #646cff;
+  }
+  to {
+    text-shadow: 
+      0 0 10px #fff,
+      0 0 20px #646cff,
+      0 0 30px #646cff,
+      0 0 40px #646cff,
+      0 0 50px #646cff;
+  }
 }
 
 button {
