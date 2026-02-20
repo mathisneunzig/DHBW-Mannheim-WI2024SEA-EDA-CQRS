@@ -3,13 +3,16 @@
 
 
 :root {
-  font-family: 'Chakra Petch',sans-serif;
+  font-family: 'Press Start 2P',sans-serif;
   line-height: 1.5;
   font-weight: 1000;
+  font-size: 1.5em;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-image: url('./assets/background.png');
+  background-size: cover;
+  background-color: #97c9dd;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -62,10 +65,10 @@ button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
-  font-size: 1em;
+  font-size: 1.5em;
   font-weight: 800;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #135d8b;
   cursor: pointer;
   transition: border-color 0.25s;
 }
