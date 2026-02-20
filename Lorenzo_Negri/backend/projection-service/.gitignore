@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Maven
+target/
+
+# Eclipse / STS
+.classpath
+.project
+.settings/

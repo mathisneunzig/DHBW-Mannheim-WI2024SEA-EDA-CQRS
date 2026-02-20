@@ -1,8 +1,8 @@
 package com.example.projection_service.service;
 
+import com.example.common.OrderPlacedEvent;
 import com.example.projection_service.domain.model.Order;
 import com.example.projection_service.domain.repository.OrderRepository;
-import com.example.projection_service.event.OrderPlacedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;

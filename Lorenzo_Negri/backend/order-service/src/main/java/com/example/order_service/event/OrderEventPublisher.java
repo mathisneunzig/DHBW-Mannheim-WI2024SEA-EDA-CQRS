@@ -1,6 +1,7 @@
 package com.example.order_service.event;
 
-import com.example.order_service.config.RabbitMQConfig;
+import com.example.common.OrderPlacedEvent;
+import com.example.common.RabbitMQConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -20,8 +21,8 @@ public class OrderEventPublisher {
     public void publishOrderPlaced(OrderPlacedEvent event) {
         logger.info("Publishing OrderPlaced event for order: {}", event.getOrderId());
         rabbitTemplate.convertAndSend(
-            RabbitMQConfig.ORDER_EXCHANGE,
-            RabbitMQConfig.ORDER_ROUTING_KEY,
+            RabbitMQConstants.ORDER_EXCHANGE,
+            RabbitMQConstants.ORDER_ROUTING_KEY,
             event
         );
     }

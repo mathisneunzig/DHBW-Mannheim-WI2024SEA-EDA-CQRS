@@ -1,10 +1,10 @@
 package com.example.order_service.service;
 
+import com.example.common.OrderPlacedEvent;
 import com.example.order_service.command.CreateOrderCommand;
 import com.example.order_service.domain.model.Order;
 import com.example.order_service.domain.repository.OrderRepository;
 import com.example.order_service.event.OrderEventPublisher;
-import com.example.order_service.event.OrderPlacedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -35,19 +35,16 @@ public class OrderService {
         );
         
         Order savedOrder = orderRepository.save(order);
-        logger.info("Order saved with id: {}", savedOrder.getId());
         
-        OrderPlacedEvent event = new OrderPlacedEvent(
-            savedOrder.getId(),
-            savedOrder.getCustomerName(),
-            savedOrder.getProduct(),
-            savedOrder.getQuantity(),
-            savedOrder.getPrice(),
-            savedOrder.getCreatedAt()
-        );
+        OrderPlacedEvent event = new OrderPlacedEvent();
+        event.setOrderId(savedOrder.getId());
+        event.setCustomerName(savedOrder.getCustomerName());
+        event.setProduct(savedOrder.getProduct());
+        event.setQuantity(savedOrder.getQuantity());
+        event.setPrice(savedOrder.getPrice());
+        event.setCreatedAt(savedOrder.getCreatedAt());
         
         eventPublisher.publishOrderPlaced(event);
-        logger.info("OrderPlaced event published for order: {}", savedOrder.getId());
         
         return savedOrder;
     }

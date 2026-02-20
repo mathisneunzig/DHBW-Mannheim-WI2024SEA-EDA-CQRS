@@ -4,26 +4,10 @@
     box-sizing: border-box;
 }
 
-:root {
-    --primary-color: #2563eb;
-    --primary-hover: #1d4ed8;
-    --secondary-color: #64748b;
-    --secondary-hover: #475569;
-    --success-color: #10b981;
-    --error-color: #ef4444;
-    --bg-color: #f8fafc;
-    --card-bg: #ffffff;
-    --text-color: #1e293b;
-    --text-muted: #64748b;
-    --border-color: #e2e8f0;
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-}
-
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
+    background-color: #f8fafc;
+    color: #1e293b;
     line-height: 1.6;
     min-height: 100vh;
 }
@@ -42,12 +26,12 @@ header {
 header h1 {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--text-color);
+    color: #1e293b;
     margin-bottom: 0.5rem;
 }
 
 .subtitle {
-    color: var(--text-muted);
+    color: #64748b;
     font-size: 1rem;
 }
 
@@ -58,17 +42,17 @@ main {
 }
 
 section {
-    background: var(--card-bg);
+    background: #ffffff;
     border-radius: 12px;
     padding: 1.5rem;
-    box-shadow: var(--shadow);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 
 section h2 {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 1.25rem;
-    color: var(--text-color);
+    color: #1e293b;
 }
 
 .section-header {
@@ -97,13 +81,13 @@ label {
     font-size: 0.875rem;
     font-weight: 500;
     margin-bottom: 0.5rem;
-    color: var(--text-color);
+    color: #1e293b;
 }
 
 input {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
     font-size: 1rem;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -111,12 +95,12 @@ input {
 
 input:focus {
     outline: none;
-    border-color: var(--primary-color);
+    border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 input::placeholder {
-    color: var(--text-muted);
+    color: #64748b;
 }
 
 .btn {
@@ -133,22 +117,22 @@ input::placeholder {
 }
 
 .btn-primary {
-    background-color: var(--primary-color);
+    background-color: #2563eb;
     color: white;
     width: 100%;
 }
 
 .btn-primary:hover {
-    background-color: var(--primary-hover);
+    background-color: #1d4ed8;
 }
 
 .btn-secondary {
-    background-color: var(--secondary-color);
+    background-color: #64748b;
     color: white;
 }
 
 .btn-secondary:hover {
-    background-color: var(--secondary-hover);
+    background-color: #475569;
 }
 
 .message {
@@ -162,15 +146,15 @@ input::placeholder {
 .message.success {
     display: block;
     background-color: rgba(16, 185, 129, 0.1);
-    color: var(--success-color);
-    border: 1px solid var(--success-color);
+    color: #10b981;
+    border: 1px solid #10b981;
 }
 
 .message.error {
     display: block;
     background-color: rgba(239, 68, 68, 0.1);
-    color: var(--error-color);
-    border: 1px solid var(--error-color);
+    color: #ef4444;
+    border: 1px solid #ef4444;
 }
 
 .orders-list {
@@ -181,20 +165,20 @@ input::placeholder {
 
 .loading {
     text-align: center;
-    color: var(--text-muted);
+    color: #64748b;
     padding: 2rem;
 }
 
 .order-card {
-    background: var(--bg-color);
-    border: 1px solid var(--border-color);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
     padding: 1rem;
     transition: box-shadow 0.2s, transform 0.2s;
 }
 
 .order-card:hover {
-    box-shadow: var(--shadow);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     transform: translateY(-2px);
 }
 
@@ -207,14 +191,14 @@ input::placeholder {
 
 .order-id {
     font-size: 0.75rem;
-    color: var(--text-muted);
+    color: #64748b;
     font-family: monospace;
 }
 
 .order-product {
     font-size: 1.125rem;
     font-weight: 600;
-    color: var(--text-color);
+    color: #1e293b;
 }
 
 .order-details {
@@ -230,7 +214,7 @@ input::placeholder {
 }
 
 .order-detail-label {
-    color: var(--text-muted);
+    color: #64748b;
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -238,12 +222,12 @@ input::placeholder {
 
 .order-detail-value {
     font-weight: 500;
-    color: var(--text-color);
+    color: #1e293b;
 }
 
 .order-card.new {
     animation: slideIn 0.3s ease-out;
-    border-color: var(--primary-color);
+    border-color: #2563eb;
     background-color: rgba(37, 99, 235, 0.05);
 }
 
@@ -260,14 +244,14 @@ input::placeholder {
 
 .empty-state {
     text-align: center;
-    color: var(--text-muted);
+    color: #64748b;
     padding: 2rem;
 }
 
 footer {
     margin-top: 2rem;
     text-align: center;
-    color: var(--text-muted);
+    color: #64748b;
     font-size: 0.875rem;
 }
 
@@ -277,7 +261,7 @@ footer p {
 
 .endpoint {
     font-family: monospace;
-    background: var(--bg-color);
+    background: #ffffff;
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
 }

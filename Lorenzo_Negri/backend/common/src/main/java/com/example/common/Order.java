@@ -1,24 +1,25 @@
-package com.example.order_service.event;
+package com.example.common;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class OrderPlacedEvent {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Order {
 
-    private String eventType = "OrderPlaced.v1";
-    private String orderId;
+    private String id;
     private String customerName;
     private String product;
     private BigDecimal quantity;
     private BigDecimal price;
     private LocalDateTime createdAt;
 
-    public OrderPlacedEvent() {
+    public Order() {
     }
 
-    public OrderPlacedEvent(String orderId, String customerName, String product, 
-                            BigDecimal quantity, BigDecimal price, LocalDateTime createdAt) {
-        this.orderId = orderId;
+    public Order(String id, String customerName, String product, BigDecimal quantity, BigDecimal price, LocalDateTime createdAt) {
+        this.id = id;
         this.customerName = customerName;
         this.product = product;
         this.quantity = quantity;
@@ -26,20 +27,12 @@ public class OrderPlacedEvent {
         this.createdAt = createdAt;
     }
 
-    public String getEventType() {
-        return eventType;
+    public String getId() {
+        return id;
     }
 
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCustomerName() {

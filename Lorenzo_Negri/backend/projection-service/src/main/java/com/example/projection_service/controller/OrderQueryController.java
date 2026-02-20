@@ -32,8 +32,7 @@ public class OrderQueryController {
 
     @GetMapping("/orders")
     public ResponseEntity<List<Order>> getAllOrders() {
-        List<Order> orders = orderService.getAllOrders();
-        return ResponseEntity.ok(orders);
+        return ResponseEntity.ok(orderService.getAllOrders());
     }
 
     @GetMapping("/orders/{id}")
@@ -46,25 +45,15 @@ public class OrderQueryController {
     @GetMapping(value = "/stream/orders", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter streamOrders() {
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
-        
         emitters.add(emitter);
         
-        emitter.onCompletion(() -> {
-            logger.info("SSE connection completed");
-            emitters.remove(emitter);
-        });
-        
-        emitter.onTimeout(() -> {
-            logger.info("SSE connection timed out");
-            emitters.remove(emitter);
-        });
-        
+        emitter.onCompletion(() -> emitters.remove(emitter));
+        emitter.onTimeout(() -> emitters.remove(emitter));
         emitter.onError(error -> {
-            logger.error("SSE connection error: {}", error.getMessage());
+            logger.error("SSE error: {}", error.getMessage());
             emitters.remove(emitter);
         });
 
-        logger.info("New SSE connection established");
         return emitter;
     }
 
@@ -80,14 +69,14 @@ public class OrderQueryController {
                     .name("order-event")
                     .data(json);
             
-            for (SseEmitter emitter : emitters) {
+            emitters.forEach(emitter -> {
                 try {
                     emitter.send(event);
                 } catch (IOException e) {
                     logger.error("Error sending to emitter: {}", e.getMessage());
                     emitters.remove(emitter);
                 }
-            }
+            });
         } catch (IOException e) {
             logger.error("Error serializing order: {}", e.getMessage());
         }

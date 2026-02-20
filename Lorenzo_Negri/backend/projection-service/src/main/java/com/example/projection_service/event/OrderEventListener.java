@@ -1,6 +1,7 @@
 package com.example.projection_service.event;
 
-import com.example.projection_service.config.RabbitMQConfig;
+import com.example.common.OrderPlacedEvent;
+import com.example.common.RabbitMQConstants;
 import com.example.projection_service.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,7 @@ public class OrderEventListener {
         this.orderService = orderService;
     }
 
-    @RabbitListener(queues = RabbitMQConfig.ORDER_QUEUE, containerFactory = "rabbitListenerContainerFactory")
+    @RabbitListener(queues = RabbitMQConstants.ORDER_QUEUE, containerFactory = "rabbitListenerContainerFactory")
     public void handleOrderPlaced(OrderPlacedEvent event) {
         logger.info("Received OrderPlaced event: {}", event.getEventType());
         

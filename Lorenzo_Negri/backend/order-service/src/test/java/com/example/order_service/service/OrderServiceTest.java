@@ -1,10 +1,10 @@
 package com.example.order_service.service;
 
+import com.example.common.OrderPlacedEvent;
 import com.example.order_service.command.CreateOrderCommand;
 import com.example.order_service.domain.model.Order;
 import com.example.order_service.domain.repository.OrderRepository;
 import com.example.order_service.event.OrderEventPublisher;
-import com.example.order_service.event.OrderPlacedEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

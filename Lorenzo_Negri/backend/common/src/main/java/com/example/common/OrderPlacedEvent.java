@@ -1,8 +1,11 @@
-package com.example.projection_service.event;
+package com.example.common;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderPlacedEvent {
 
     private String eventType = "OrderPlaced.v1";
@@ -14,16 +17,6 @@ public class OrderPlacedEvent {
     private LocalDateTime createdAt;
 
     public OrderPlacedEvent() {
-    }
-
-    public OrderPlacedEvent(String orderId, String customerName, String product, 
-                            BigDecimal quantity, BigDecimal price, LocalDateTime createdAt) {
-        this.orderId = orderId;
-        this.customerName = customerName;
-        this.product = product;
-        this.quantity = quantity;
-        this.price = price;
-        this.createdAt = createdAt;
     }
 
     public String getEventType() {

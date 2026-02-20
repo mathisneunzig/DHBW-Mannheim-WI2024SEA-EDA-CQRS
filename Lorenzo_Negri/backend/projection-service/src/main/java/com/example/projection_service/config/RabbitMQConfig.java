@@ -1,5 +1,6 @@
 package com.example.projection_service.config;
 
+import com.example.common.RabbitMQConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -15,23 +16,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String ORDER_EXCHANGE = "order.exchange";
-    public static final String ORDER_QUEUE = "order.queue";
-    public static final String ORDER_ROUTING_KEY = "order.placed";
-
     @Bean
     public TopicExchange orderExchange() {
-        return new TopicExchange(ORDER_EXCHANGE);
+        return new TopicExchange(RabbitMQConstants.ORDER_EXCHANGE);
     }
 
     @Bean
     public Queue orderQueue() {
-        return QueueBuilder.durable(ORDER_QUEUE).build();
+        return QueueBuilder.durable(RabbitMQConstants.ORDER_QUEUE).build();
     }
 
     @Bean
     public Binding orderBinding(Queue orderQueue, TopicExchange orderExchange) {
-        return BindingBuilder.bind(orderQueue).to(orderExchange).with(ORDER_ROUTING_KEY);
+        return BindingBuilder.bind(orderQueue).to(orderExchange).with(RabbitMQConstants.ORDER_ROUTING_KEY);
     }
 
     @Bean

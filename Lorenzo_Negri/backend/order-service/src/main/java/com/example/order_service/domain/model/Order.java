@@ -28,6 +28,9 @@ public class Order {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    public Order() {
+    }
+
     @PrePersist
     public void prePersist() {
         if (id == null) {
@@ -36,9 +39,6 @@ public class Order {
         if (createdAt == null) {
             createdAt = LocalDateTime.now();
         }
-    }
-
-    public Order() {
     }
 
     public Order(String customerName, String product, BigDecimal quantity, BigDecimal price) {
