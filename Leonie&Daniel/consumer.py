@@ -21,11 +21,11 @@ def main():
 
 async def set_light_color(hsv_data):
             credentials = Credentials(
-                username="s241226@student.dhbw-mannheim.de",
-                password="Bob1234!"
+                username="<insert_email_here>", #email ändern
+                password="<insert_password_here>" #passwort ändern
             )
             
-            device = await Discover.discover_single("192.168.178.44", credentials=credentials) #set your own ip address
+            device = await Discover.discover_single("192.168.178.31", credentials=credentials) #set your own ip address
             await device.update()
             await device.set_hsv(hsv_data[0], hsv_data[1], hsv_data[2])
             await device.disconnect()

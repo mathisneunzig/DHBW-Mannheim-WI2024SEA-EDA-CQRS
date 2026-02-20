@@ -35,7 +35,7 @@ def display_menu():
     print("\n🎨 Change Color:")
     for char, color in COLORS.items():
         print(f"  {char} = {color[0]}")
-    print(" ran = random")
+    print("  ran = random")
     
     print("\n⚙️  Other Options:")
     print("  Ctrl+C  = Exit program")
@@ -44,6 +44,7 @@ def display_menu():
 def sendEvent(data):
 
     if (data != None):
+        print(data)
         channel.basic_publish(
             exchange='',
             routing_key="events",
@@ -55,23 +56,24 @@ def sendEvent(data):
         )
         print("Data successfully sent")
     else:
-        print("No data sent")
+        print("Invalid input")
 
 def getHexColorCode(input_char):
-    print(input_char)
     if (input_char == "ran"):
         return (random.randint(0, 360), 100, 60)
     for color_char, color in COLORS.items():
         if (strip_ansi(color_char) == input_char):
             return color[1]
-    print("Kein Command für diesen Input :(")
     return None
 
 def create_data(color):
-    data = {
-        "color": color,
-    }
-    return json.dumps(data).encode()
+    if (color != None):
+        data = {
+            "color": color,
+        }
+        return json.dumps(data).encode()
+    else:
+        return None
 
 def create_event():
     sendEvent(
