@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: mood_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mood_network
+
+  mood_sender:
+    build: ./mood_sender
+    container_name: mood_sender
+    ports:
+      - "5001:5000"
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - mood_network
+
+  mood_wall:
+    build: ./mood_wall
+    container_name: mood_wall
+    ports:
+      - "5002:5000"
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - mood_network
+
+networks:
+  mood_network:
+    driver: bridge
