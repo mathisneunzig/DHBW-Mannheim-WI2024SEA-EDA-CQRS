@@ -13,9 +13,6 @@ import vhappy from './assets/tamagochi/veryhappy.gif'
 import hungerbar from './assets/hungerbar.png'
 import boredbar from './assets/boredbar.png'
 import tiredbar from './assets/tiredbar.png'
-import apple from './assets/icons/apple.png'
-import bed from './assets/icons/bed.png'
-import pokeball from './assets/icons/pokeball.png'
 import border from './assets/border.png'
 import feedButton from './assets/buttons/feedbutton.png'
 import sleepButton from './assets/buttons/sleepbutton.png'
@@ -165,6 +162,27 @@ display: block;
 	height: 1em;
 	width: auto;
 	vertical-align: middle;
+}
+
+p {
+	text-shadow: 
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000,
+		0 0 8px rgba(0, 0, 0, 0.5);
+	font-weight: bold;
+	color: white;
+}
+
+h1 {
+	text-shadow: 
+		-2px -2px 0 #000,
+		2px -2px 0 #000,
+		-2px 2px 0 #000,
+		2px 2px 0 #000,
+		0 0 10px rgba(0, 0, 0, 0.7);
+	color: white;
 }
 button:disabled {
   opacity: 0.5;
