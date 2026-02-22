@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Home - Sender</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f4; 
+            text-align: center; 
+            margin: 50px; 
+        }
+        .container { 
+            background-color: white;  
+            padding: 20px; 
+            max-width: 400px; 
+            margin: 0 auto; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button { 
+            display: block; 
+            width: 100%; 
+            padding: 15px; 
+            margin: 10px 0; 
+            font-size: 16px; 
+            cursor: pointer; 
+            border-radius: 5px; 
+            background: grey; 
+        }
+        button:hover { 
+            background: yellow; 
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sensor-Eingabe</h1>
+    
+    <div class="container">
+        <p>Klicke auf einen Button, um einen Sensor auszulösen:</p>
+        <button onclick="trigger('sensor-flur')">Sensor Flur</button>
+        <button onclick="trigger('sensor-kueche')">Sensor Küche</button>
+        <button onclick="trigger('sensor-bad')">Sensor Bad</button>
+    </div>
+
+    <script>
+        function trigger(sensorId) {
+            // Sendet einen POST-Request an den Go-Server
+            fetch('/trigger?sensor=' + sensorId, { method: 'POST' });
+            console.log("Event gesendet: " + sensorId);
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+name: rabbitmq
+
+services:
+  rabbitmq:
+    image: rabbitmq:4.2.4-management-alpine
+    container_name: mein-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    restart: unless-stopped
