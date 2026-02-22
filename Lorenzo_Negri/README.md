@@ -7,6 +7,8 @@ Matrikelnummer: 5082963
 
 Dieses Projekt implementiert ein Bestellverwaltungssystem unter Verwendung des CQRS (Command Query Responsibility Segregation)-Patterns in Kombination mit EDA (Event-Driven Architecture). Die Anwendung ermöglicht das Anlegen und Anzeigen von Bestellungen über eine Website.
 
+**Die Spring Boot Services wurden mithilfe von Spring Initialzr (https://start.spring.io/) aufgesetzt** 
+
 ### Aufbau
 
  **Frontend:** HTML/CSS/Javascript 
@@ -30,7 +32,7 @@ Der Projection Service konsumiert dieses Event und speichert die Daten in seiner
 ### Voraussetzungen
 
 - Java 17+
-- Docker Desktop
+- Docker Desktop (im Hintergrund öffnen)
 
 ### Schritte
 
