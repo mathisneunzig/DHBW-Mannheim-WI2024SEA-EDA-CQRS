@@ -68,8 +68,27 @@ Der Projection Service konsumiert dieses Event und speichert die Daten in seiner
 4. **Frontend starten**
    # Live Server Extension in VS Code herunterladen und dann mit Rechtsklick auf die index.html Datei mittels Live Server die Website öffnen
 
+### Bei Problemen: 
+
+   ```bash 
+   # Ports checken 
+   netstat -ano | findstr :8080
+   netstat -ano | findstr :8083
+
+   # Falls Port belegt: 
+   cmd 
+
+   taskkill /F /PID <"PID-Number">
+
+   # Docker Container beenden 
+   docker compose down 
+   # Neustarten 
+   docker compose up -d 
+
+   ```
+
 ### Ports:
 
-- **RabbitMQ Management UI**: http://localhost:15672 (Name: guest   Passwort: guest)
+- **RabbitMQ Management UI**: http://localhost:15672 (Name: guest ,  Passwort: guest)
 - **Order Service**: http://localhost:8080
 - **Projection Service**: http://localhost:8083
