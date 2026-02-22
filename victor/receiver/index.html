@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Home - Status</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f4; 
+            text-align: center; 
+            margin: 50px; 
+        }
+        .container { 
+             background-color: white;  
+            padding: 20px; 
+            max-width: 400px; 
+            margin: 0 auto; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .lamp { 
+            padding: 15px; 
+            margin: 10px 0; 
+            border: 1px solid #999; 
+            border-radius: 5px; 
+            font-size: 16px; 
+        }
+        .on { background-color: yellow; }
+        .off { background-color: #e0e0e0; }
+    </style>
+</head>
+<body>
+
+    <h1>Lampen-Status</h1>
+    
+    <div class="container" id="status">
+        <p>Warte auf Daten vom Server...</p>
+    </div>
+
+    <script>
+        async function fetchStatus() {
+            const response = await fetch('/state');
+            const lamps = await response.json();
+            
+            let html = '';
+
+            for (const [name, isOn] of Object.entries(lamps)) {
+                let statusClass = isOn ? 'on' : 'off';
+                let statusText = isOn ? 'AN' : 'AUS';
+                html += `<div class="lamp ${statusClass}"><strong>${name}</strong>: ${statusText}</div>`;
+            }
+
+            document.getElementById('status').innerHTML = html;
+        }
+
+        fetchStatus();
+        setInterval(fetchStatus, 2000);
+    </script>
+
+</body>
+</html>
