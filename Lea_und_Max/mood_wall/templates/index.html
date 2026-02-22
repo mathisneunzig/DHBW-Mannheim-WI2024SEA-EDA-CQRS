@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tommy's Mood Wall</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Tommy's Mood Wall</h1>
+        <p class="subtitle">Live statistics of Tommy's moods</p>
+        
+        <div class="score-box" id="scoreBox">
+            <div class="score-label">Tommy's Current Mood Score</div>
+            <div class="score-value" id="scoreValue">0</div>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-box good" id="goodBox">
+                <img src="/static/happy_tommy.png" alt="Happy Tommy" class="cat-image">
+                <div class="stat-label">Glücklicher Tommy</div>
+                <div class="stat-value" id="goodCount">0</div>
+            </div>
+            
+            <div class="stat-box bad" id="badBox">
+                <img src="/static/sad_tommy.png" alt="Sad Tommy" class="cat-image">
+                <div class="stat-label">Trauriger Tommy</div>
+                <div class="stat-value" id="badCount">0</div>
+            </div>
+        </div>
+        
+        <div class="update-info">
+            Auto-refreshing every 2 seconds
+        </div>
+    </div>
+
+    <script>
+        let previousStats = { good: 0, bad: 0, score: 0 };
+        
+        async function updateStats() {
+            try {
+                const response = await fetch('/stats');
+                const stats = await response.json();
+                
+                if (stats.good !== previousStats.good) {
+                    document.getElementById('goodCount').textContent = stats.good;
+                    document.getElementById('goodBox').classList.add('pulse');
+                    setTimeout(() => {
+                        document.getElementById('goodBox').classList.remove('pulse');
+                    }, 1000);
+                }
+                
+                if (stats.bad !== previousStats.bad) {
+                    document.getElementById('badCount').textContent = stats.bad;
+                    document.getElementById('badBox').classList.add('pulse');
+                    setTimeout(() => {
+                        document.getElementById('badBox').classList.remove('pulse');
+                    }, 1000);
+                }
+                
+                if (stats.score !== previousStats.score) {
+                    document.getElementById('scoreValue').textContent = stats.score;
+                    document.getElementById('scoreBox').classList.add('pulse');
+                    setTimeout(() => {
+                        document.getElementById('scoreBox').classList.remove('pulse');
+                    }, 1000);
+                }
+                
+                previousStats = stats;
+                
+            } catch (error) {
+                console.error('Failed to fetch stats:', error);
+            }
+        }
+        
+        updateStats();
+        
+        setInterval(updateStats, 2000);
+    </script>
+</body>
+</html>

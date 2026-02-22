@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tommy's Mood Sender</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Tommy's Mood Relay</h1>
+        <p class="subtitle">Share Tommy's mood with the world!</p>
+        
+        <div class="label">How is Tommy feeling today?</div>
+        
+        <div class="button-container">
+            <button class="good-btn" onclick="sendMood('good')" title="Tommy ist glücklich">
+                <img src="/static/happy_tommy.png" alt="Glücklicher Tommy">
+            </button>
+            <button class="bad-btn" onclick="sendMood('bad')" title="Tommy ist traurig">
+                <img src="/static/sad_tommy.png" alt="Trauriger Tommy">
+            </button>
+        </div>
+        
+        <div id="status" class="info">Click a mood to send an event!</div>
+    </div>
+
+    <script>
+        async function sendMood(type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = 'Sending...';
+            statusDiv.className = 'info';
+            
+            try {
+                const response = await fetch(`/send/${type}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusDiv.textContent = `Success: ${data.message}`;
+                    statusDiv.className = 'success';
+                } else {
+                    statusDiv.textContent = `Error: ${data.error}`;
+                    statusDiv.className = 'error';
+                }
+            } catch (error) {
+                statusDiv.textContent = `Failed to send: ${error.message}`;
+                statusDiv.className = 'error';
+            }
+        }
+    </script>
+</body>
+</html>
