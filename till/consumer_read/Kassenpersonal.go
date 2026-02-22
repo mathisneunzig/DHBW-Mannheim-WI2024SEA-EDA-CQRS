@@ -1,4 +1,4 @@
-package producer
+package consumer_read
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ type Kassenpersonal struct {
 }
 
 func NewKassenpersonal() (*Kassenpersonal, error) {
-	broker, err := broker.NewBrokerUtil("tcp://localhost:1883", "producer", "user", "password")
+	broker, err := broker.NewBrokerUtil("tcp://localhost:1883", "kasse", "user", "password")
 	if err != nil {
 		fmt.Printf("Error: %v", err)
 		return nil, err
@@ -28,5 +28,13 @@ func (k *Kassenpersonal) message_callback(_ mqtt.Client, msg mqtt.Message) {
 }
 
 func (k *Kassenpersonal) CreateOrder(order string) {
-	k.broker.PublishMessage("order/new", order)
+}
+
+func SendToWork() {
+	_, err := NewKassenpersonal()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	select {}
 }

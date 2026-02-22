@@ -7,7 +7,7 @@ import (
 )
 
 type CoffeeOrderCreated struct {
-	OrderID int    `json:"order_id"`
+	OrderID string `json:"order_id"`
 	Name    string `json:"name"`
 	Drink   string `json:"drink"`
 	Size    string `json:"size"`
@@ -38,16 +38,16 @@ func NewBrokerUtil(url string, clientID string, user string, password string) (*
 	return &BrokerUtil{mqttClient: client}, nil
 }
 
-func (b *BrokerUtil) SubscribeTopic(topic string, message_callback mqtt.MessageHandler) {
+func (b *BrokerUtil) SubscribeTopic(topic string, message_callback mqtt.MessageHandler, name string) {
 	token := b.mqttClient.Subscribe(topic, 1, nil)
 	token.Wait()
 	if token.Error() != nil {
 		fmt.Printf("Fehler! Topic %s nicht subscribed! Fehler: %s", topic, token.Error())
 	}
-	fmt.Printf("Erfolgreich %s subscribed!", topic)
+	fmt.Printf("Erfolgreich %s subscribed! von %v", topic, name)
 }
 
-func (b *BrokerUtil) PublishMessage(topic string, msg string) {
+func (b *BrokerUtil) PublishEvent(topic string, msg string) {
 	token := b.mqttClient.Publish(topic, 1, false, msg)
 	token.Wait()
 	if token.Error() != nil {
