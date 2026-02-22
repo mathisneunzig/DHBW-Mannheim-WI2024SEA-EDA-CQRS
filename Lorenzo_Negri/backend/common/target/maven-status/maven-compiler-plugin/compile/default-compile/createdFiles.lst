@@ -1,0 +1,3 @@
+com\example\common\RabbitMQConstants.class
+com\example\common\OrderPlacedEvent.class
+com\example\common\Order.class
