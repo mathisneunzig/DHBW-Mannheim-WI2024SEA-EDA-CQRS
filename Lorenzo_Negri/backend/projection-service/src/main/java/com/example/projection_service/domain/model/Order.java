@@ -44,4 +44,6 @@ public class Order {
         this.price = price;
         this.createdAt = createdAt;
     }
+
+    protected Order() {}
 }

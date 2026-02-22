@@ -1,5 +1,8 @@
 package com.example.projection_service.controller;
-
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import com.example.projection_service.domain.model.Order;
 import com.example.projection_service.service.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,13 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/queries")
 public class OrderQueryController {
@@ -57,7 +58,7 @@ public class OrderQueryController {
         return emitter;
     }
 
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleOrderCreated(Order order) {
         broadcastOrderEvent(order);
     }
