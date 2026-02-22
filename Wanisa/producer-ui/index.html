@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SmartHome die Steuerung</title>
+    <link rel="stylesheet" href="styles.css"/>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>SmartHome Tranquilo Admin</h1>
+      </div>
+      <div class="section">
+        <h2>Lichter</h2>
+        <div class="button-group">
+          <button onclick="sendCommand('LICHT_UMSCHALTEN', { room: 'Wohnzimmer', state: 'on' })">An</button>
+          <button onclick="sendCommand('LICHT_UMSCHALTEN', { room: 'Wohnzimmer', state: 'off' })">Aus</button>
+        </div>
+      </div>
+      <div class="section">
+        <h2>Heizung</h2>
+        <div class="temp-control">
+          <button class="temp-btn" onclick="changeTemp(-1)">-</button>
+          <div class="temp-display" id="tempDisplay">20°C</div>
+          <button class="temp-btn" onclick="changeTemp(1)">+</button>
+          <button onclick="sendHeating()">Senden</button>
+          <button class="heating-off" onclick="sendHeatingOff()">Aus</button>
+        </div>
+      </div>
+      <div class="section">
+        <h2>Alarm</h2>
+        <button class="alarm-btn" onclick="sendCommand('ALARM_AKTIVIEREN', { zone: 'Eingang', wichtigkeit: 'high' })">Alarm auslösen</button>
+      </div>
+      <div class="section">
+        <h2>Log</h2>
+        <div id="eventLog">
+          <div class="empty-log">Keine Events</div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const WS_URL = 'ws://localhost:8080';
+      let ws = null;
+      let currentTemp = 20;
+      let log = [];
+      function connectToEventBus() {
+        try {
+          ws = new WebSocket(WS_URL);
+          ws.onopen = () => {
+            console.log('Connected');
+          };
+          ws.onmessage = (e) => {
+            try {
+              const msg = JSON.parse(e.data);
+              if (msg.kind === 'BESTÄTIGUNG') {
+                console.log('Command accepted:', msg.commandType);
+              }
+            } catch (err) {
+              console.error('Parse error:', err);
+            }
+          };
+          ws.onerror = (err) => console.error('WebSocket error:', err);
+          ws.onclose = () => {
+            setTimeout(connectToEventBus, 3000);
+          };
+        } catch (err) {
+          console.error('Connection failed:', err);
+          setTimeout(connectToEventBus, 3000);
+        }
+      }
+      function sendCommand(type, payload) {
+        if (!ws || ws.readyState !== WebSocket.OPEN) {
+          alert('Nicht verbunden');
+          return;
+        }
+        ws.send(JSON.stringify({ kind: 'BEFEHL', command: { type, payload } }));
+        addLog(type, payload);
+      }
+      function changeTemp(delta) {
+        currentTemp = Math.max(10, Math.min(30, currentTemp + delta));
+        document.getElementById('tempDisplay').textContent = currentTemp + '°C';
+      }
+      function sendHeating() {
+        sendCommand('HEIZUNG_STELLEN', { temperature: currentTemp, mode: 'on' });
+      }
+      function sendHeatingOff() {
+        sendCommand('HEIZUNG_STELLEN', { temperature: 0, mode: 'off' });
+      }
+      function addLog(type, payload) {
+        const now = new Date().toLocaleTimeString('de-DE');
+        log.unshift({ time: now, type, payload });
+        if (log.length > 20) log.pop();
+        renderLog();
+      }
+      function renderLog() {
+        const logDiv = document.getElementById('eventLog');
+        if (log.length === 0) {
+          logDiv.innerHTML = '<div class="empty-log">Keine Events</div>';
+          return;
+        }
+        logDiv.innerHTML = log.map(item => `
+          <div class="log-entry">
+            <span class="time">${item.time}</span>
+            <span class="type">${item.type}</span>
+            <span>${JSON.stringify(item.payload)}</span>
+          </div>
+        `).join('');}
+      document.addEventListener('DOMContentLoaded', connectToEventBus);
+    </script>
+  </body>
+</html>

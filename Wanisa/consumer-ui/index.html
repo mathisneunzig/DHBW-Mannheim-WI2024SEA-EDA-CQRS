@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SmartHome, die Anzeige für den Ednuser</title>
+    <link rel="stylesheet" href="styles.css"/>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>SmartHome Tranquilo</h1>
+      </div>
+      <div class="card lights-card" id="lightsCard">
+        <h2>Lichter</h2>
+        <div class="light-status" id="lightIcon">OFF</div>
+        <div class="light-text" id="lightText">Aus</div>
+      </div>
+      <div class="card heating-card" id="heatingCard">
+        <h2>Heizung</h2>
+        <div class="temp-big" id="tempDisplay">--</div>
+        <div class="heating-mode" id="heatingMode">Aus</div>
+      </div>
+      <div class="card alarm-card" id="alarmCard">
+        <h2>Alarm</h2>
+        <div class="alarm-status" id="alarmIcon">INAKTIV</div>
+        <div class="alarm-text" id="alarmText">Inaktiv</div>
+      </div>
+      <div class="card">
+        <h2>Events</h2>
+        <div class="event-feed" id="eventFeed">
+          <div class="empty-message">Warte auf Events</div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const WS_URL = 'ws://localhost:8080';
+      let ws = null;
+      let events = [];
+
+      let state = {
+        lights: 'off',
+        heating: { temp: null, mode: 'off'},
+        alarm: { active: false },
+      };
+      function connectToEventBus() {
+        try {
+          ws = new WebSocket(WS_URL);
+          ws.onopen = () => console.log('Connected');
+          ws.onmessage = (e) => {
+            try {
+              const msg = JSON.parse(e.data);
+              if (msg.kind === 'EREIGNIS') {
+                onEvent(msg.event);
+              }
+            } catch (err) {
+              console.error('Parse error:', err);
+            }
+          };
+          ws.onerror = (err) => console.error('Error:', err);
+          ws.onclose = () => setTimeout(connectToEventBus, 3000);
+        } catch (err) {
+          console.error('Connection failed:', err);
+          setTimeout(connectToEventBus, 3000);
+        }}
+      function onEvent(event) {
+        const { type, payload } = event;
+        if (type === 'LICHT_UMGESCHALTET') {
+          if (payload.room === 'all' && payload.state === 'off') {
+            state.lights = 'off';
+          } else {
+            state.lights = payload.state;
+          }
+          updateLights();
+        }
+        if (type === 'HEIZUNG_GEÄNDERT') {
+          state.heating = { temp: payload.temperature, mode: payload.mode };
+          updateHeating();
+        }
+        if (type === 'ALARM_AUSGELÖST') {
+          state.alarm = { active: true, zone: payload.zone };
+          updateAlarm();
+          setTimeout(() => {
+            state.alarm = { active: false };
+            updateAlarm();
+          }, 10000);
+        }
+        addEvent(type);
+      }
+      function updateLights() {
+        const card = document.getElementById('lightsCard');
+        const icon = document.getElementById('lightIcon');
+        const text = document.getElementById('lightText');
+        if (state.lights === 'on') {
+          card.classList.add('on');
+          icon.textContent = 'ON';
+          text.textContent = 'An';
+        } else {
+          card.classList.remove('on');
+          icon.textContent = 'OFF';
+          text.textContent = 'Aus';
+        }
+      }
+      function updateHeating() {
+        const card = document.getElementById('heatingCard');
+        const temp = document.getElementById('tempDisplay');
+        const mode = document.getElementById('heatingMode');
+        card.classList.remove('on');
+        if (state.heating.mode === 'off') {
+          temp.textContent = '--';
+          mode.textContent = 'Aus';
+        } else {
+          card.classList.add('on');
+          temp.textContent = state.heating.temp + '°';
+          mode.textContent = 'An';
+        }
+      }
+      function updateAlarm() {
+        const card = document.getElementById('alarmCard');
+        const icon = document.getElementById('alarmIcon');
+        const text = document.getElementById('alarmText');
+        if (state.alarm.active) {
+          card.classList.add('triggered');
+          icon.textContent = 'AUSGELÖST';
+          text.textContent = 'Ausgelöst!';
+        } else {
+          card.classList.remove('triggered');
+          icon.textContent = 'INAKTIV';
+          text.textContent = 'Inaktiv';
+        }
+      }
+      function addEvent(type) {
+        const time = new Date().toLocaleTimeString('de-DE');
+        events.unshift({ time, type });
+        if (events.length > 15) events.pop();
+        renderEvents();
+      }
+      function renderEvents() {
+        const feed = document.getElementById('eventFeed');
+        feed.innerHTML = events.map(e => `
+          <div class="event-item">
+            <span class="type">${e.type}</span>
+            <span> • ${e.time}</span>
+          </div>
+        `).join('');}
+      document.addEventListener('DOMContentLoaded', connectToEventBus);
+    </script>
+  </body>
+</html>
